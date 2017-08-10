@@ -1,7 +1,9 @@
 var mysql = require("mysql");
 
 if(process.env.JAWSDB_URL) {
-    connection = mysql.createConnection(process.env.JAWSDB_URL);
+    var connection = mysql.createConnection(process.env.JAWSDB_URL);
+    
+    console.log("jaws connection");
 }else {
 
 var connection = mysql.createConnection({
@@ -10,7 +12,8 @@ var connection = mysql.createConnection({
   password: "Unicorn17!",
   database: "weeklyPlanner_db"
 });
-
+    console.log("local connect");
+};
  
 connection.connect(function(err) {
   if (err) {
@@ -19,6 +22,6 @@ connection.connect(function(err) {
   }
   console.log("connected as id " + connection.threadId);
 });
-};
+
 
 module.exports = connection;
