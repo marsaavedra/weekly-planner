@@ -1,5 +1,31 @@
-var connection = require("./connection.js");
+// Import MySQL connection.
+var connection = require("../config/connection.js");
 
+// Helper function for SQL syntax.
+function printQuestionMarks(num) {
+  var arr = [];
+
+  for (var i = 0; i < num; i++) {
+    arr.push("?");
+  }
+
+  return arr.toString();
+}
+
+// Helper function for SQL syntax.
+function objToSql(ob) {
+  var arr = [];
+
+  for (var key in ob) {
+    if (Object.hasOwnProperty.call(ob, key)) {
+      arr.push(key + "=" + ob[key]);
+    }
+  }
+
+  return arr.toString();
+}
+
+// Object for all our SQL statement functions.
 var orm = {
   all: function(tableInput, cb) {
     var queryString = "SELECT * FROM " + tableInput + ";";
@@ -10,8 +36,7 @@ var orm = {
       cb(result);
     });
   },
-    
-    create: function(table, cols, vals, cb) {
+  create: function(table, cols, vals, cb) {
     var queryString = "INSERT INTO " + table;
 
     queryString += " (";
@@ -27,12 +52,11 @@ var orm = {
       if (err) {
         throw err;
       }
-
       cb(result);
     });
-    },
-    
-    update: function(table, objColVals, condition, cb) {
+  },
+  // An example of objColVals would be {task_name: eat, done: true}
+  update: function(table, objColVals, condition, cb) {
     var queryString = "UPDATE " + table;
 
     queryString += " SET ";
@@ -45,8 +69,12 @@ var orm = {
       if (err) {
         throw err;
       }
+
       cb(result);
     });
   }
-}
+   
+};
+
+// Export the orm object for the model (planner.js).
 module.exports = orm;
